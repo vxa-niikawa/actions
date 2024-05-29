@@ -1,0 +1,10 @@
+# developブランチへのPRで自動テストの実行とデプロイをしたいやつ
+#
+name: auto deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [ develop ]
+    paths:
+        - 'force-app/**'
