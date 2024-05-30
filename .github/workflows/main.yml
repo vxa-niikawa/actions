@@ -48,5 +48,5 @@ jobs:
         #run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
       # Create a scratch org
       - name: "Create scratch org"
-        run: sf org create scratch -d -f config/project-scratch.json -a our-scratch-org --duration-days 1
+        run: sf org create scratch -d -f config/project-scratch-def -a our-scratch-org --duration-days 1
 
