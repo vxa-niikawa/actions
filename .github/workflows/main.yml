@@ -28,7 +28,9 @@ jobs:
           npm install @salesforce/cli --location=global
           nodeInstallPath=$(npm config get prefix)
           echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-          sf --version        
+          sf --version
+          sf_version=$(sf --version)
+          echo ${sf_version}
       #    wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
       #    mkdir ~/sfdx
       #    tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
