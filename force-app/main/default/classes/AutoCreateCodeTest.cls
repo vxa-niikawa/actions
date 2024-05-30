@@ -2,13 +2,14 @@
  * @class AutoCreateCodeTest
  * @description AutoCreateCodeクラスのバッチ処理をテストするためのテストクラスです。
  */
-public with sharing class AutoCreateCodeTest {
+@isTest
+public class AutoCreateCodeTest {
 
     /**
      * @description AutoCreateCodeバッチの実行をテストします。
      */
     @isTest
-    private static void testBatchExecution() {
+    public static void testBatchExecution() {
         // テストデータの作成
         Account testAccount = new Account(Name = 'Test Account');
         insert testAccount;
