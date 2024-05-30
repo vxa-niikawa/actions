@@ -36,8 +36,8 @@ jobs:
       #    echo "$HOME/sfdx/bin" >> $GITHUB_PATH
       #    ~/sfdx/bin/sfdx version
       - name: Run a echo script
-        run: echo Hellow, GitHub Action
-        
-
+        run: |
+          echo Hellow, GitHub Action
+          echo ${{ secrets.DEVHUB_SFDX_URL }}
         
 
