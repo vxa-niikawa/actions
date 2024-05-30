@@ -35,9 +35,18 @@ jobs:
       #    tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
       #    echo "$HOME/sfdx/bin" >> $GITHUB_PATH
       #    ~/sfdx/bin/sfdx version
+      
+      # sf org display -o [your devhub alias] --verboseの結果を保持したsecretsから取得
       - name: Run a echo script
+        shell: bash
         run: |
           echo Hellow, GitHub Action
-          echo ${{ secrets.DEVHUB_SFDX_URL }}
-        
+          echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
+      # Authenticate to org
+      - name: 'Authenticate to Integration Org'
+        run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
+        #run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
+      # Create a scratch org
+      - name: "Create scratch org"
+        run: sf org create scratch -d -f config/project-scratch.json -a our-scratch-org --duration-days 1
 
