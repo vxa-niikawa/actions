@@ -32,7 +32,9 @@ jobs:
         id: cache-node-modules
         with:
           #path: node_modules
-          path: "**/node_modules"
+          path: |
+            /usr/local/bin/@salesforce/cli
+            /usr/local/lib/node_modules/@salesforce/cli
           key: ${{ runner.os }}-test1-${{ hashFiles('**/package-lock.json') }}
           #restore-keys: |
           #  ${{ runner.os }}-test1-
@@ -40,7 +42,7 @@ jobs:
       - name: install salesforce cli
         if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
         run: |
-          npm install @salesforce/cli
+          npm install @salesforce/cli --location=global
           nodeInstallPath=$(npm config get prefix)
           echo "$nodeInstallPath/bin" >> $GITHUB_PATH
           sf --version
