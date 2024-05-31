@@ -43,6 +43,7 @@ jobs:
   build:
     name: apex test
     runs-on: ubuntu-latest
+    needs: setup
     steps: 
       - name: after cache
         run: |
