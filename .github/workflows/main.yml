@@ -11,25 +11,56 @@ on:
   workflow_dispatch:
 
 jobs:
+  # set up & cache
+  setup:
+    name: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '18'    
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: install salesforce cli
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+      - name: set path
+        run: echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+        
   build:
     name: apex test
     runs-on: ubuntu-latest
     steps: 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.2
-        with:
-          node-version: '18'    
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - name: 'Install Salesforce CLI'
+      - name: after cache
         run: |
-          npm install @salesforce/cli --location=global
-          nodeInstallPath=$(npm config get prefix)
-          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-          sf --version
+          echo "-->${{steps.cache-node-modules.outputs.cache-hit}}<--"
+    
+    #  - name: Setup Node.js environment
+    #    uses: actions/setup-node@v4.0.2
+    #    with:
+    #      node-version: '18'    
+    #  - name: Checkout
+    #    uses: actions/checkout@v4
+    #    with:
+    #      fetch-depth: 0
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      - run: sf --version
+      
+    #  - name: 'Install Salesforce CLI'
+    #    run: |
+    #      npm install @salesforce/cli --location=global
+    #      nodeInstallPath=$(npm config get prefix)
+    #      echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+    #      sf --version
       #    wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
       #    mkdir ~/sfdx
       #    tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
@@ -37,10 +68,10 @@ jobs:
       #    ~/sfdx/bin/sfdx version
       
       # install SFDX-Git-Delta plugin
-      - name: 'Installing sfdx git delta'
-        run: | 
-          echo y | sfdx plugins:install sfdx-git-delta
-          sfdx plugins
+      #- name: 'Installing sfdx git delta'
+      #  run: | 
+      #    echo y | sfdx plugins:install sfdx-git-delta
+      #    sfdx plugins
 
       # –generate-deltaフラグを使用して、追加または変更されたメタデータのみを含むforce-appフォルダーのコピーを生成
       - name: 'Create delta packages for new, modified or deleted metadata'
