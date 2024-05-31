@@ -49,23 +49,23 @@ jobs:
         run: |
           echo "-->${{steps.cache-node-modules.outputs.cache-hit}}<--"
     
-    #  - name: Setup Node.js environment
-    #    uses: actions/setup-node@v4.0.2
-    #    with:
-    #      node-version: '18'    
-    #  - name: Checkout
-    #    uses: actions/checkout@v4
-    #    with:
-    #      fetch-depth: 0
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '18'    
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: sf --version
+    #  - run: sf --version
       
-    #  - name: 'Install Salesforce CLI'
-    #    run: |
-    #      npm install @salesforce/cli --location=global
-    #      nodeInstallPath=$(npm config get prefix)
-    #      echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-    #      sf --version
+      - name: 'Install Salesforce CLI'
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          sf --version
       #    wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
       #    mkdir ~/sfdx
       #    tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
