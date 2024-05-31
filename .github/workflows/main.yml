@@ -30,12 +30,12 @@ jobs:
         with:
           #path: node_modules
           path: "**/node_modules"
-          key: ${{ runner.os }}-test-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-test1-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-          
+            ${{ runner.os }}-test1-
           #fail-on-cache-miss: true
       - name: install salesforce cli
-        if: ${{ steps.cache_dependency.outputs.cache-hit != 'true' }}
+        if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
         run: |
           npm install @salesforce/cli --location=global
           nodeInstallPath=$(npm config get prefix)
