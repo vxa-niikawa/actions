@@ -40,18 +40,12 @@ jobs:
       - name: install salesforce cli
         if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
         run: |
-          npm ci
+          npm install @salesforce/cli --location=global
           nodeInstallPath=$(npm config get prefix)
           echo "$nodeInstallPath/bin" >> $GITHUB_PATH
           sf --version
           echo y | sfdx plugins:install sfdx-git-delta
           sfdx plugins
-        #  npm install @salesforce/cli --location=global
-        #  nodeInstallPath=$(npm config get prefix)
-        #  echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-        #  sf --version
-        #  echo y | sfdx plugins:install sfdx-git-delta
-        #  sfdx plugins
       - name: after cache
         run: |
           echo '${{ toJSON(steps.cache-node-modules.outputs) }}'
