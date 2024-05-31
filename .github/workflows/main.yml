@@ -9,59 +9,13 @@ on:
     paths:
         - 'force-app/**'
   workflow_dispatch:
-
-env:
-  NODE_CASH_ID: cache-node-modules
-  
+ 
 jobs:
-  # set up & cache
-  setup:
-    name: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.0.2
-        with:
-          node-version: '20'
-      #    cache: npm
-      - name: cache node modules
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          #path: node_modules
-          path: |
-            /usr/local/bin/@salesforce/cli
-            /usr/local/lib/node_modules/@salesforce/cli
-          key: ${{ runner.os }}-test1-${{ hashFiles('**/package-lock.json') }}
-          #restore-keys: |
-          #  ${{ runner.os }}-test1-
-          #fail-on-cache-miss: true
-      - name: install salesforce cli
-        if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' }}
-        run: |
-          npm install @salesforce/cli --location=global
-          nodeInstallPath=$(npm config get prefix)
-          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-          sf --version
-          echo y | sfdx plugins:install sfdx-git-delta
-          sfdx plugins
-      - name: after cache
-        run: |
-          echo '${{ toJSON(steps.cache-node-modules.outputs) }}'
-          echo "-->${{steps.cache-node-modules.outputs.cache-hit}}<--"
-        
+  # set up & cache  
   build:
     name: apex test
     runs-on: ubuntu-latest
-    needs: setup
-    steps: 
-      - name: after cache
-        run: |
-          echo "-->${{steps.cache-node-modules.outputs.cache-hit}}<--"
-    
+    steps:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4.0.2
         with:
@@ -71,35 +25,22 @@ jobs:
         with:
           fetch-depth: 0
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      # キャッシュを利用する
-      - name: restore node modules
-        uses: actions/cache@v4
-        id: cache-node-modules
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-test1-${{ hashFiles('**/package-lock.json') }}
-      - run: sf --version
-      
-      #- name: 'Install Salesforce CLI'
-      #  run: |
-      #    npm install @salesforce/cli --location=global
-      #    nodeInstallPath=$(npm config get prefix)
-      #    echo "$nodeInstallPath/bin" >> $GITHUB_PATH
-      #    sf --version
-      #    wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
-      #    mkdir ~/sfdx
-      #    tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
-      #    echo "$HOME/sfdx/bin" >> $GITHUB_PATH
-      #    ~/sfdx/bin/sfdx version
-      
-      # install SFDX-Git-Delta plugin
-      #- name: 'Installing sfdx git delta'
-      #  run: | 
-      #    echo y | sfdx plugins:install sfdx-git-delta
-      #    sfdx plugins
-
+      # globalでインストールする必要があるあｔめキャッシュを利用できない
+      # 正確なインストール先のパスがわかればキャッシュ化できるのだが。。。。
+      - name: 'install Salesforce CLI'
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          sf --version
+      # 差分抽出用にdeltaをインストール
+      - name: 'installing sfdx git delta'
+        run: | 
+          echo y | sfdx plugins:install sfdx-git-delta
+          sfdx plugins
       # –generate-deltaフラグを使用して、追加または変更されたメタデータのみを含むforce-appフォルダーのコピーを生成
       - name: 'Create delta packages for new, modified or deleted metadata'
+        # 対象PRとの差分を抽出
         run: |
            mkdir changed-sources
            sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
