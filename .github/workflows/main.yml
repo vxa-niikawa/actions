@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('package.json') }}
       - name: install salesforce cli
         run: |
           npm install @salesforce/cli --location=global
