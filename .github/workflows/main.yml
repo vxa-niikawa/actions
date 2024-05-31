@@ -27,10 +27,10 @@ jobs:
         uses: actions/cache@v4
         id: cache-node-modules
         with:
-          # path: node_modules
+          #path: node_modules
           path: "**/node_modules"
           key: ${{ runner.os }}-modules
-          fail-on-cache-miss: true
+          #fail-on-cache-miss: true
       - name: install salesforce cli
         if: ${{ steps.cache_dependency.outputs.cache-hit != 'true' }}
         run: |
