@@ -57,14 +57,23 @@ jobs:
         run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
         #run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
 
-      - name: 'deploy cancel'
-        run: sf project deploy cancel --job-id 0AfGB00000o59BS0AY
-
       # 差分デプロイを実行
       # テスト全実行しているので指定されてものだけにしたい
       - name: 'deploy delta'
-        run: sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json
+        run: |
+          result=sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json
+          echo "DRY_DEPLOY_RESULT=$result" >> $GITHUB_ENV
 
+      - name: Parse JSON Response
+        id: parse_json
+        run: |
+          echo "${{ env.DRY_DEPLOY_RESULT }}" | jq '.id' > parsed_value.txt
+          parsed_value=$(cat parsed_value.txt)
+          echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
+
+      - name: Use Parsed Value
+        run: echo ${{ env.PARSED_VALUE }}
+      
       # 直前のデプロイ操作をキャンセル
       - name: 'cancel deploy'
         run: sf project deploy cancel --use-most-recent
