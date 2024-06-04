@@ -59,6 +59,7 @@ jobs:
       # 差分デプロイを実行
       # テスト全実行しているので指定されてものだけにしたい
       - name: 'deploy delta'
+        shell: bash
         run: |
           sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
 
