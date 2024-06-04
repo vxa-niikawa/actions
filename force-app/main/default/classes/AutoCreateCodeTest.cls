@@ -47,6 +47,6 @@ private class AutoCreateCodeTest {
 
         // 結果を検証
         Account testAccount = [SELECT Id, Total_Opportunity_Amount__c FROM Account LIMIT 1];
-        System.assertEquals(3000, testAccount.Total_Opportunity_Amount__c, '合計金額が正しく計算されていません');
+        System.assert(3000 == testAccount.Total_Opportunity_Amount__c, '合計金額が正しく計算されていません');
     }
 }
