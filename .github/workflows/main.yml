@@ -78,7 +78,7 @@ jobs:
       
       # 直前のデプロイ操作をキャンセル
       - name: 'cancel deploy'
-        run: sf project deploy cancel --job-id ${{ env.PARSED_VALUE }}
+        run: sf project release cancel --job-id ${{ env.PARSED_VALUE }}
         #run: sf project deploy cancel --use-most-recent
       
       # Create a scratch org
