@@ -1,5 +1,8 @@
 # developブランチへのPRで自動テストの実行とデプロイをしたいやつ
-#
+# [前提]
+# salesforceの開発では開発者毎にsandbox or scratch org を用意して開発が行われているはず。
+# よって、feature/hotfixブランチで開発されたものは開発者自身が自分の環境で最低限のテストが実施される。
+# コードレビュー時にPRを出す場合は
 name: auto deploy
 
 on:
@@ -25,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      # globalでインストールする必要があるあｔめキャッシュを利用できない
+      # globalでインストールする必要があるためキャッシュを利用できない
       # 正確なインストール先のパスがわかればキャッシュ化できるのだが。。。。
       - name: 'install Salesforce CLI'
         run: |
@@ -46,15 +49,11 @@ jobs:
            sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
 
       # sf org display -o [your devhub alias] --verboseの結果を保持したsecretsから取得
-      - name: Run a echo script
-        shell: bash
-        run: |
-          echo Hellow, GitHub Action
-          echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
+      - name: Get Login URL
+        run: echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
       
       # Authenticate to org
       - name: 'Authenticate to Integration Org'
-        #run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
         run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
 
       # 差分デプロイを実行
@@ -74,8 +73,16 @@ jobs:
           echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
 
       - name: Use Parsed Value
-        run: echo ${{ env.PARSED_VALUE }}
-      
+        run: |
+          echo ${{ env.PARSED_VALUE }}
+          echo -e "{\n \"${{ github.event.pull_request.number }}\": ${{ env.PARSED_VALUE }} }" >> jobids.json
+          cat jobids.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release
+          path: jobids.json
       
       # Create a scratch org
       #- name: "Create scratch org"
