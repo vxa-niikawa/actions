@@ -22,6 +22,7 @@ private class AutoCreateCodeTest {
             CloseDate = Date.today(),
             Amount = 1000
         );
+        
         Opportunity opp2 = new Opportunity(
             Name = 'Test Opportunity 2',
             AccountId = testAccount.Id,
