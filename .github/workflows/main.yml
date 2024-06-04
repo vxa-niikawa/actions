@@ -69,7 +69,7 @@ jobs:
       - name: Parse JSON Response
         id: parse_json
         run: |
-          cat deploy_result.json | jq '.id' > parsed_value.txt
+          cat deploy_result.json | jq '.result.id' > parsed_value.txt
           parsed_value=$(cat parsed_value.txt)
           echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
 
@@ -78,8 +78,8 @@ jobs:
       
       # 直前のデプロイ操作をキャンセル
       - name: 'cancel deploy'
-      #  run: sf project deploy cancel --job-id ${{ env.PARSED_VALUE }}
-        run: sf project deploy cancel --use-most-recent
+        run: sf project deploy cancel --job-id ${{ env.PARSED_VALUE }}
+        #run: sf project deploy cancel --use-most-recent
       
       # Create a scratch org
       #- name: "Create scratch org"
