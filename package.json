@@ -37,8 +37,5 @@
     "**/{aura,lwc}/**/*.js": [
       "eslint"
     ]
-  },
-  "dependencies": {
-    "@salesforce/cli": "^2.43.7"
   }
 }
