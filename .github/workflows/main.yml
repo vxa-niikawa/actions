@@ -63,6 +63,9 @@ jobs:
         run: |
           sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
 
+      - name: Cat JSON Response
+        run: cat deploy_result.json
+        
       - name: Parse JSON Response
         id: parse_json
         run: |
