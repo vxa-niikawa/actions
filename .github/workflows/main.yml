@@ -60,14 +60,12 @@ jobs:
       # 差分デプロイを実行
       # テスト全実行しているので指定されてものだけにしたい
       - name: 'deploy delta'
-        run: |
-          result=sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json
-          echo "DRY_DEPLOY_RESULT=$result" >> $GITHUB_ENV
+        run: sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
 
       - name: Parse JSON Response
         id: parse_json
         run: |
-          echo "${{ env.DRY_DEPLOY_RESULT }}" | jq '.id' > parsed_value.txt
+          cat deploy_result.json | jq '.id' > parsed_value.txt
           parsed_value=$(cat parsed_value.txt)
           echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
 
