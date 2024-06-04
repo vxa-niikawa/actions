@@ -74,10 +74,11 @@ jobs:
           parsed_value=$(cat parsed_value.txt)
           echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
 
+      # ここは外部のDB等に保存した方がいい
       - name: Use Parsed Value
         run: |
           echo ${{ env.PARSED_VALUE }}
-          echo -e "{\n \"${{ github.event.pull_request.number }}\": ${{ env.PARSED_VALUE }} }" >> jobids.json
+          echo -e "{\n \"${{ github.event.pull_request.number }}\": ${{ env.PARSED_VALUE }} \n}" >> jobids.json
           cat jobids.json
 
       - name: Upload Artifact
