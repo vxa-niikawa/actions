@@ -54,8 +54,8 @@ jobs:
       
       # Authenticate to org
       - name: 'Authenticate to Integration Org'
-        run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
-        #run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
+        #run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
+        run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
 
       # 差分デプロイを実行
       # テスト全実行しているので指定されてものだけにしたい
@@ -76,10 +76,6 @@ jobs:
       - name: Use Parsed Value
         run: echo ${{ env.PARSED_VALUE }}
       
-      # 直前のデプロイ操作をキャンセル
-      - name: 'cancel deploy'
-        run: sf project release cancel --job-id ${{ env.PARSED_VALUE }}
-        #run: sf project deploy cancel --use-most-recent
       
       # Create a scratch org
       #- name: "Create scratch org"
