@@ -61,22 +61,22 @@ jobs:
       # テスト全実行しているので指定されてものだけにしたい
       - name: 'deploy delta'
         run: |
-          sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
+          sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json
 
-      - name: Parse JSON Response
-        id: parse_json
-        run: |
-          cat deploy_result.json | jq '.id' > parsed_value.txt
-          parsed_value=$(cat parsed_value.txt)
-          echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
+      #- name: Parse JSON Response
+      #  id: parse_json
+      #  run: |
+      #    cat deploy_result.json | jq '.id' > parsed_value.txt
+      #    parsed_value=$(cat parsed_value.txt)
+      #    echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
 
-      - name: Use Parsed Value
-        run: echo ${{ env.PARSED_VALUE }}
+      #- name: Use Parsed Value
+      #  run: echo ${{ env.PARSED_VALUE }}
       
       # 直前のデプロイ操作をキャンセル
       - name: 'cancel deploy'
-        run: sf project deploy cancel --job-id ${{ env.PARSED_VALUE }}
-        #run: sf project deploy cancel --use-most-recent
+      #  run: sf project deploy cancel --job-id ${{ env.PARSED_VALUE }}
+        run: sf project deploy cancel --use-most-recent
       
       # Create a scratch org
       #- name: "Create scratch org"
