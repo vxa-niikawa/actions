@@ -1,48 +1,52 @@
 /**
  * @class AutoCreateCodeTest
- * @description AutoCreateCodeクラスのバッチ処理をテストするためのテストクラスです。
+ * @description AutoCreateCodeクラスのテストクラス
  */
 @isTest
-public class AutoCreateCodeTest {
+private class AutoCreateCodeTest {
 
     /**
-     * @description AutoCreateCodeバッチの実行をテストします。
+     * @description テストデータをセットアップするメソッド
      */
-    @isTest
-    public static void testBatchExecution() {
-        // テストデータの作成
+    @testSetup
+    static void setupTestData() {
+        // テスト用のアカウントを作成
         Account testAccount = new Account(Name = 'Test Account');
         insert testAccount;
 
-        Opportunity testOpportunity1 = new Opportunity(
+        // テスト用の商談を作成
+        Opportunity opp1 = new Opportunity(
             Name = 'Test Opportunity 1',
             AccountId = testAccount.Id,
-            CloseDate = Date.today(),
             StageName = 'Prospecting',
+            CloseDate = Date.today(),
             Amount = 1000
         );
-        Opportunity testOpportunity2 = new Opportunity(
+        Opportunity opp2 = new Opportunity(
             Name = 'Test Opportunity 2',
             AccountId = testAccount.Id,
-            CloseDate = Date.today(),
             StageName = 'Prospecting',
+            CloseDate = Date.today(),
             Amount = 2000
         );
-        insert new List<Opportunity>{testOpportunity1, testOpportunity2};
+        insert new List<Opportunity>{ opp1, opp2 };
+    }
 
-        // バッチの実行
-        Test.startTest();
+    /**
+     * @description バッチ処理の実行をテストするメソッド
+     */
+    @isTest
+    static void testBatchExecution() {
+        // バッチインスタンスを作成
         AutoCreateCode batch = new AutoCreateCode();
+
+        // バッチを実行
+        Test.startTest();
         Database.executeBatch(batch);
         Test.stopTest();
 
-        // 結果の検証
-        testAccount = [SELECT Id, (SELECT Amount FROM Opportunities) FROM Account WHERE Id = :testAccount.Id];
-        System.assertEquals(2, testAccount.Opportunities.size(), '商談の数が正しくありません');
-        Decimal totalAmount = 0;
-        for (Opportunity opp : testAccount.Opportunities) {
-            totalAmount += opp.Amount;
-        }
-        System.assertEquals(3000, totalAmount, '合計金額が正しくありません');
+        // 結果を検証
+        Account testAccount = [SELECT Id, Total_Opportunity_Amount__c FROM Account LIMIT 1];
+        System.assertEquals(3000, testAccount.Total_Opportunity_Amount__c, '合計金額が正しく計算されていません');
     }
 }

@@ -19,6 +19,7 @@ public with sharing class AutoCreateCode implements Database.Batchable<SObject>,
             SELECT Id, AccountId, Amount 
             FROM Opportunity 
             WHERE CloseDate = :Date.today()
+            ORDER BY AccountId ASC
         ]);
     }
 
