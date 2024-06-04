@@ -54,15 +54,15 @@ jobs:
       
       # Authenticate to org
       - name: 'Authenticate to Integration Org'
-        run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
+        run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
+        #run: sf org login sfdx-url -f ./DEVHUB_SFDX_URL.txt -a DevHub_vxa -d
 
       # 差分デプロイを実行
       # テスト全実行しているので指定されてものだけにしたい
-      #    sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
       - name: 'deploy delta'
         shell: bash
         run: |
-          sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json
+          sfdx force:source:deploy -p changed-sources/force-app --checkonly --testlevel RunLocalTests --json > deploy_result.json
 
       - name: Cat JSON Response
         run: cat deploy_result.json
