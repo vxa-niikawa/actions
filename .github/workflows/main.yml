@@ -8,7 +8,7 @@ name: auto deploy
 on:
   pull_request:
     types: [opened, synchronize]
-    branches: [ main ]
+    branches: [ develop ]
     paths:
         - 'force-app/**'
   workflow_dispatch:
