@@ -33,16 +33,8 @@ jobs:
       - name: Authenticate to Org
         run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
 
-      - name: Create Download Dir
-        run: mkdir dowload
-
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: release_3
-          path: dowload
-          merge-multiple: true
-      - run: ls -R dowload      
-
+      - name: Get Taerget Records
+        run: |
+          sfdx force:data:soql:query -q "SELECT Id, Name, JOB_Id__c, PR_Number__c FROM Dry_Deploy__c WHERE Status__c = 'pending' " -r json > result.json
         
       
