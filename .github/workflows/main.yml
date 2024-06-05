@@ -79,17 +79,17 @@ jobs:
       - name: Use Parsed Value
         run: |
           echo ${{ env.JOB_ID }}
-          echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
-          cat release_pull_request.txt
-          mkdir ${{ github.event.pull_request.number }}
-          echo -e ${{ env.JOB_ID }} > ${{ github.event.pull_request.number }}/jobid.txt
-          cat ${{ github.event.pull_request.number }}/jobid.txt
+          # echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
+          # cat release_pull_request.txt
+          # mkdir ${{ github.event.pull_request.number }}
+          echo -e ${{ env.JOB_ID }} > jobid_${{ github.event.pull_request.number }}.txt
+          cat jobid_${{ github.event.pull_request.number }}.txt
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: "release_${{ github.event.pull_request.number }}"
-          path: ${{ github.event.pull_request.number }}/jobid.txt
+          path: jobid_${{ github.event.pull_request.number }}.txt
           overwrite: true
 
       - run: mkdir dowload
@@ -101,7 +101,7 @@ jobs:
           path: dowload
 
       - name: show download file
-        run: cat dowload/jobid.txt
+        run: cat dowload/jobid_${{ github.event.pull_request.number }}.txt
       # Create a scratch org
       #- name: "Create scratch org"
       #  run: sf org create scratch -d -f config/project-scratch-def.json -a our-scratch-org --target-dev-hub DevHub_vxa --duration-days 1
