@@ -74,39 +74,37 @@ jobs:
           parsed_value=$(cat parsed_value.txt)
           echo "JOB_ID=$parsed_value" >> $GITHUB_ENV
 
+      # ジョブIDとPR番号を保持しておく
       - name: Create record in Dry_Deploy__c
         run: |
           sfdx force:data:record:create -s DryDaployInfo__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }}"
           
-      # ここは外部のDB等に保存した方がいい
+      # ↓ここで作成したアーティファクトを他のワークフローで読み込むことができななったためコメントアウト
       # ここではartifactで管理するためにテキストで出力しておく
-      - name: Use Parsed Value
-        run: |
-          echo ${{ env.JOB_ID }}
-          # echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
-          # cat release_pull_request.txt
-          # mkdir ${{ github.event.pull_request.number }}
-          echo -e ${{ env.JOB_ID }} > jobid_${{ github.event.pull_request.number }}.txt
-          cat jobid_${{ github.event.pull_request.number }}.txt
+      #- name: Use Parsed Value
+      #  run: |
+      #    echo ${{ env.JOB_ID }}
+      #    # echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
+      #    # cat release_pull_request.txt
+      #    # mkdir ${{ github.event.pull_request.number }}
+      #    echo -e ${{ env.JOB_ID }} > jobid_${{ github.event.pull_request.number }}.txt
+      #    cat jobid_${{ github.event.pull_request.number }}.txt
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: "release_${{ github.event.pull_request.number }}"
-          path: jobid_${{ github.event.pull_request.number }}.txt
-          overwrite: true
+      #- name: Upload Artifact
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: "release_${{ github.event.pull_request.number }}"
+      #    path: jobid_${{ github.event.pull_request.number }}.txt
+      #    overwrite: true
 
-      - run: mkdir dowload
+      #- run: mkdir dowload
       
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: "release_${{ github.event.pull_request.number }}"
-          path: dowload
+      #- name: Download build artifact
+      #  uses: actions/download-artifact@v4
+      #  with:
+      #    name: "release_${{ github.event.pull_request.number }}"
+      #    path: dowload
 
-      - name: show download file
-        run: cat dowload/jobid_${{ github.event.pull_request.number }}.txt
-      # Create a scratch org
-      #- name: "Create scratch org"
-      #  run: sf org create scratch -d -f config/project-scratch-def.json -a our-scratch-org --target-dev-hub DevHub_vxa --duration-days 1
+      #- name: show download file
+      #  run: cat dowload/jobid_${{ github.event.pull_request.number }}.txt
 
