@@ -74,6 +74,10 @@ jobs:
           parsed_value=$(cat parsed_value.txt)
           echo "JOB_ID=$parsed_value" >> $GITHUB_ENV
 
+      - name: Create record in Dry_Deploy__c
+        run: |
+          sfdx force:data:record:create -s Dry_Deploy__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }}"
+          
       # ここは外部のDB等に保存した方がいい
       # ここではartifactで管理するためにテキストで出力しておく
       - name: Use Parsed Value
