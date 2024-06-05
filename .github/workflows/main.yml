@@ -90,12 +90,15 @@ jobs:
         with:
           name: "release_${{ github.event.pull_request.number }}"
           path: ${{ github.event.pull_request.number }}/jobid.txt
+          overwrite: true
 
+      - run: mkdir dowload
+      
       - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
           name: "release_${{ github.event.pull_request.number }}"
-          path: /
+          path: dowload
       # Create a scratch org
       #- name: "Create scratch org"
       #  run: sf org create scratch -d -f config/project-scratch-def.json -a our-scratch-org --target-dev-hub DevHub_vxa --duration-days 1
