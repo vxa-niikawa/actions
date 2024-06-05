@@ -72,21 +72,30 @@ jobs:
         run: |
           cat deploy_result.json | jq '.result.id' > parsed_value.txt
           parsed_value=$(cat parsed_value.txt)
-          echo "PARSED_VALUE=$parsed_value" >> $GITHUB_ENV
+          echo "JOB_ID=$parsed_value" >> $GITHUB_ENV
 
       # ここは外部のDB等に保存した方がいい
+      # ここではartifactで管理するためにテキストで出力しておく
       - name: Use Parsed Value
         run: |
-          echo ${{ env.PARSED_VALUE }}
-          echo -e "{\n \"${{ github.event.pull_request.number }}\": ${{ env.PARSED_VALUE }} \n}" >> jobids.json
-          cat jobids.json
+          echo ${{ env.JOB_ID }}
+          echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
+          cat release_pull_request.txt
+          echo -e ${{ env.JOB_ID }} > ${{ github.event.pull_request.number }}/jobid.txt
+          cat ${{ github.event.pull_request.number }}/jobid.txt
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: release
-          path: jobids.json
-      
+          name: "release_${{ github.event.pull_request.number }}"
+          path: ${{ github.event.pull_request.number }}/jobid.txt
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: "release_${{ github.event.pull_request.number }}"
+          path: ${{ github.event.pull_request.number }}/jobid.txt
+
       # Create a scratch org
       #- name: "Create scratch org"
       #  run: sf org create scratch -d -f config/project-scratch-def.json -a our-scratch-org --target-dev-hub DevHub_vxa --duration-days 1
