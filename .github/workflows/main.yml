@@ -81,6 +81,7 @@ jobs:
           echo ${{ env.JOB_ID }}
           echo -e ${{ github.event.pull_request.number }} >> release_pull_request.txt
           cat release_pull_request.txt
+          mkdir ${{ github.event.pull_request.number }}
           echo -e ${{ env.JOB_ID }} > ${{ github.event.pull_request.number }}/jobid.txt
           cat ${{ github.event.pull_request.number }}/jobid.txt
 
