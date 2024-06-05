@@ -2,7 +2,7 @@
 # [前提]
 # salesforceの開発では開発者毎にsandbox or scratch org を用意して開発が行われているはず。
 # よって、feature/hotfixブランチで開発されたものは開発者自身が自分の環境で最低限のテストが実施される。
-# コードレビュー時にPRを出す場合は
+# コードレビュー時にPRを出すということは
 name: auto deploy
 
 on:
@@ -77,7 +77,7 @@ jobs:
       # ジョブIDとPR番号を保持しておく
       - name: Create record in Dry_Deploy__c
         run: |
-          sfdx force:data:record:create -s DryDaployInfo__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }}"
+          sfdx force:data:record:create -s DryDaployInfo__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }} Status__c='pending'"
           
       # ↓ここで作成したアーティファクトを他のワークフローで読み込むことができななったためコメントアウト
       # ここではartifactで管理するためにテキストで出力しておく
