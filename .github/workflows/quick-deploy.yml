@@ -35,6 +35,6 @@ jobs:
 
       - name: Get Taerget Records
         run: |
-          sfdx force:data:soql:query -q "SELECT Id, Name, JOB_Id__c, PR_Number__c FROM Dry_Deploy__c WHERE Status__c = 'pending' " -r json > result.json
+          sfdx force:data:soql:query -q "SELECT Id, Name, JOB_Id__c, PR_Number__c FROM DryDaployInfo__c WHERE Status__c = 'pending' " -r json > result.json
         
       
