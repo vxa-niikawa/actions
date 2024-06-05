@@ -4,7 +4,7 @@
  * @implements Database.Batchable<SObject>
  * @implements Database.Stateful
  */
-public with sharing class AutoCreateCode implements Database.Batchable<SObject>, Database.Stateful {
+public class AutoCreateCode implements Database.Batchable<SObject>, Database.Stateful {
 
     // バッチ間で共有するための変数
     private Map<Id, Decimal> accountTotals = new Map<Id, Decimal>();
@@ -19,6 +19,7 @@ public with sharing class AutoCreateCode implements Database.Batchable<SObject>,
             SELECT Id, AccountId, Amount 
             FROM Opportunity 
             WHERE CloseDate = :Date.today()
+            ORDER BY AccountId Desc
         ]);
     }
 
