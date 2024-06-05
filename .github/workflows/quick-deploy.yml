@@ -36,7 +36,7 @@ jobs:
 
       - name: Get Taerget Records
         run: |
-          sf data query --query "SELECT Id, Name, JOB_Id__c, PR_Number__c FROM DryDaployInfo__c WHERE Status__c = 'pending' " --json > result.json
+          sf data query --query "SELECT Id, Name, JOB_Id__c, PR_Number__c FROM DryDaployInfo__c WHERE Status__c = 'ready' " --json > result.json
           cat result.json
 
       - name: released
