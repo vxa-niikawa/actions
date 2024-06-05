@@ -77,7 +77,7 @@ jobs:
       # ジョブIDとPR番号を保持しておく
       - name: Create record in Dry_Deploy__c
         run: |
-          sfdx force:data:record:create -s DryDaployInfo__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }} Status__c='pending'"
+          sfdx force:data:record:create -s DryDaployInfo__c -v "Job_Id__c=${{ env.JOB_ID }} PR_Number__c=${{ github.event.pull_request.number }}"
           
       # ↓ここで作成したアーティファクトを他のワークフローで読み込むことができななったためコメントアウト
       # ここではartifactで管理するためにテキストで出力しておく
