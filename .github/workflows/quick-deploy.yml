@@ -44,10 +44,10 @@ jobs:
           data=$(cat result.json)
           records=$(echo $data | jq -c '.result.records[]')
           for record in $records; do
-            record_id=$(echo $record | jq -r '.id')
+            record_id=$(echo $record | jq -r '.Id')
             job_id=$(echo $record | jq -r '.Job_Id__c')
             sf project deploy quick --job-id $job_id
             current_datetime=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            sf data update record --sobject Account --record-id $record_id --values "Status__c='released' Released_Date__c='$current_datetime'"
+            sf data update record --sobject DryDaployInfo__c --record-id $record_id --values "Status__c='released' Released_Date__c='$current_datetime'"
           done
       
