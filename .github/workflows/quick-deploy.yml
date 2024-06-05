@@ -1,0 +1,48 @@
+name: アーティファクトに保存されているクイックリリース対象をリリースする
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # set up & cache  
+  download:
+    name: apex test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v4.0.2
+        with:
+          node-version: '20'
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      # globalでインストールする必要があるためキャッシュを利用できない
+      # 正確なインストール先のパスがわかればキャッシュ化できるのだが。。。。
+      - name: 'install Salesforce CLI'
+        run: |
+          npm install @salesforce/cli --location=global
+          nodeInstallPath=$(npm config get prefix)
+          echo "$nodeInstallPath/bin" >> $GITHUB_PATH
+          sf --version
+
+      - name: Get Login URL
+        run: echo ${{ secrets.DEVHUB_SFDX_URL }} > ./DEVHUB_SFDX_URL.txt
+
+      - name: Authenticate to Org
+        run: sfdx auth:sfdxurl:store -f ./DEVHUB_SFDX_URL.txt -s -a DevHub_vxa
+
+      - name: Create Download Dir
+        run: mkdir dowload
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dowload
+          pattern: release_*
+          merge-multiple: true
+      - run: ls -R dowload      
+
+        
+      
