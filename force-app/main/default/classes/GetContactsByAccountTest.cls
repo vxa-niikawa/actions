@@ -7,22 +7,22 @@
 **/
 @isTest
 private class GetContactsByAccountTest {
-    @testSetup
-    static void setupTestData() {
-        // テスト用のアカウントを作成
-        Account testAccount = new Account(Name = 'Test Account');
-        insert testAccount;
+    // @testSetup
+    // static void setupTestData() {
+    //     // テスト用のアカウントを作成
+    //     Account testAccount = new Account(Name = 'Test Account');
+    //     insert testAccount;
 
-        // テスト用の連絡先を作成
-        Contact testContact = new Contact(
-            FirstName = 'Test',
-            LastName = 'Contact',
-            Email = 'test@example.com',
-            Phone = '1234567890',
-            AccountId = testAccount.Id
-        );
-        insert testContact;
-    }
+    //     // テスト用の連絡先を作成
+    //     Contact testContact = new Contact(
+    //         FirstName = 'Test',
+    //         LastName = 'Contact',
+    //         Email = 'test@example.com',
+    //         Phone = '1234567890',
+    //         AccountId = testAccount.Id
+    //     );
+    //     insert testContact;
+    // }
 
 
     @isTest
