@@ -39,7 +39,7 @@ private class GetContactsByAccountTest {
         insert testContact;
 
         Test.startTest();
-        List<Contact> contacts = GetContactsByAccount.getContacts(new List<Id>{testAccount.Id});
+        List<Contact> contacts = ActionFlow2.getContacts(new List<Id>{testAccount.Id});
         Test.stopTest();
 
         System.assertEquals(1, contacts.size(), '取得した連絡先の数が正しくありません');

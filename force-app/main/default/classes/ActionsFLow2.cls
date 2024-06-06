@@ -5,7 +5,7 @@
  * @last modified on  : 2024-06-06
  * @last modified by  : t-niikawa
 **/
-public with sharing class GetContactsByAccount {
+public with sharing class ActionFlow2 {
     
     @InvocableMethod(label='Get Contacts by Account ID' description='Returns the contacts related to a given Account ID')
     public static List<Contact> getContacts(List<Id> accountIds) {
