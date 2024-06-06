@@ -47,6 +47,7 @@ jobs:
         run: |
            mkdir changed-sources
            sfdx sgd:source:delta --to "HEAD" --from "HEAD^" --output changed-sources/ --generate-delta --source force-app/
+           ls force-app/
 
       # sf org display -o [your devhub alias] --verboseの結果を保持したsecretsから取得
       - name: Get Login URL
