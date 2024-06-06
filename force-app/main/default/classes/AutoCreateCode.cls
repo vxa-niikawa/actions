@@ -20,7 +20,8 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
             SELECT Id, Name, AccountId, Amount 
             FROM Opportunity 
             WHERE CloseDate = :Date.today()
-            ORDER BY AccountId Desc
+            ORDER BY AccountId Asc
+            Limit 1000
         ]);
     }
 
