@@ -24,7 +24,6 @@ private class GetContactsByAccountTest {
     //     insert testContact;
     // }
 
-
     @isTest
     static void testGetContactsByAccount() {
         Account testAccount = new Account(Name = 'Test Account');
