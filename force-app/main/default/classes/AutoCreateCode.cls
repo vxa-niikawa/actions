@@ -30,7 +30,6 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
      * @param scope List<Opportunity>
      */
     public void execute(Database.BatchableContext BC, List<Opportunity> scope) {
-
         for (Opportunity opp : scope) {
             if (accountTotals.containsKey(opp.AccountId)) {
                 accountTotals.put(opp.AccountId, accountTotals.get(opp.AccountId) + opp.Amount);
