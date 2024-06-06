@@ -66,9 +66,10 @@ jobs:
         run: |
           sf project deploy start -d changed-sources/force-app --dry-run --test-level RunLocalTests --json > deploy_result.json || cat deploy_result.json
 
-      - name: Cat JSON Response
-        run: cat deploy_result.json
-        
+      - name: if error exit
+        if: failure()
+        run: exit 1
+                
       - name: Parse JSON Response
         id: parse_json
         run: |
