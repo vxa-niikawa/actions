@@ -15,8 +15,9 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
      * @return Database.QueryLocator
      */
     public Database.QueryLocator start(Database.BatchableContext BC) {
+
         return Database.getQueryLocator([
-            SELECT Id, AccountId, Amount 
+            SELECT Id, Name, AccountId, Amount 
             FROM Opportunity 
             WHERE CloseDate = :Date.today()
             ORDER BY AccountId Desc
