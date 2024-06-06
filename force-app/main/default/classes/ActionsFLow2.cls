@@ -11,7 +11,7 @@ public with sharing class ActionsFLow2 {
     public static List<Contact> getContacts(List<Id> accountIds) {
         // Ensure only one Account ID is passed
         if (accountIds == null || accountIds.size() != 1) {
-            throw new IllegalArgumentException('Exactly one Account ID must be provided');
+            throw new IllegalArgumentException('Exactly one Account ID must be provided auto release test 1');
         }
 
         Id accountId = accountIds[0];
