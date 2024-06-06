@@ -11,7 +11,7 @@ private class AutoCreateCodeTest {
     @testSetup
     static void setupTestData() {
         // テスト用のアカウントを作成
-        Account testAccount = new Account(Name = 'Test Account');
+        Account testAccount = new Account(Name = 'Test Account1');
         insert testAccount;
 
         // テスト用の商談を作成
