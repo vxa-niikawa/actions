@@ -15,11 +15,13 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
      * @return Database.QueryLocator
      */
     public Database.QueryLocator start(Database.BatchableContext BC) {
+
         return Database.getQueryLocator([
-            SELECT Id, AccountId, Amount 
+            SELECT Id, Name, AccountId, Amount 
             FROM Opportunity 
             WHERE CloseDate = :Date.today()
-            ORDER BY AccountId Desc
+            ORDER BY AccountId Asc
+            Limit 100
         ]);
     }
 
@@ -43,10 +45,11 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
      * @param BC Database.BatchableContext
      */
     public void finish(Database.BatchableContext BC) {
-        for (Id accountId : accountTotals.keySet()) {
+
+        //for (Id accountId : accountTotals.keySet()) {
             // Account acc = [SELECT Id, Total_Opportunity_Amount__c FROM Account WHERE Id = :accountId LIMIT 1];
             // acc.Total_Opportunity_Amount__c = accountTotals.get(accountId);
             // update acc;
-        }
+        //}
     }
 }
