@@ -45,11 +45,11 @@ public class AutoCreateCode implements Database.Batchable<SObject>, Database.Sta
      * @param BC Database.BatchableContext
      */
     public void finish(Database.BatchableContext BC) {
-        
-        for (Id accountId : accountTotals.keySet()) {
+
+        //for (Id accountId : accountTotals.keySet()) {
             // Account acc = [SELECT Id, Total_Opportunity_Amount__c FROM Account WHERE Id = :accountId LIMIT 1];
             // acc.Total_Opportunity_Amount__c = accountTotals.get(accountId);
             // update acc;
-        }
+        //}
     }
 }
