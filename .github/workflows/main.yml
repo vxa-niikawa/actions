@@ -63,7 +63,7 @@ jobs:
       - name: 'deploy delta'
         shell: bash
         run: |
-          sf project deploy start -d changed-sources/force-app --dry-run --test-level RunLocalTests > deploy_result.json
+          sf project deploy start -d changed-sources/force-app --dry-run --test-level RunLocalTests --json > deploy_result.json
 
       - name: Cat JSON Response
         run: cat deploy_result.json
